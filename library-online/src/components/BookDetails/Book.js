@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
 
-class BookDetail extends Component {
+class Book extends Component {
   render() {
     return (
       <section class="product-sec">
@@ -99,4 +99,4 @@ class BookDetail extends Component {
   }
 }
 
-export default BookDetail;
+export default Book;

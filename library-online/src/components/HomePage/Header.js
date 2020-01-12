@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   render() {
@@ -45,14 +46,10 @@ class Header extends Component {
               >
                 <ul className="navbar-nav ml-auto">
                   <li className="navbar-item active">
-                    <a href="index.html" className="nav-link">
-                      Home
-                    </a>
+                    <Link to="/">Home</Link>
                   </li>
                   <li className="navbar-item">
-                    <a href="books.html" className="nav-link">
-                      Books
-                    </a>
+                    <Link to="/books">Books</Link>
                   </li>
                   <li className="navbar-item">
                     <a href="about.html" className="nav-link">
