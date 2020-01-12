@@ -62,9 +62,7 @@ class Header extends Component {
                     </a>
                   </li>
                   <li className="navbar-item">
-                    <a href="login.html" className="nav-link">
-                      Login
-                    </a>
+                    <Link to="/login">Login</Link>
                   </li>
                 </ul>
                 <div className="cart my-2 my-lg-0">
