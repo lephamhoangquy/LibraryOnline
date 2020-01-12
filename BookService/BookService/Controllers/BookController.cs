@@ -39,22 +39,16 @@ namespace BookService.Controllers
             return StatusCode(200, response);
         }
 
-        // POST: api/Book
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpGet("search")]
+        public async Task<IActionResult> GetBookByTitle(string title, int offset, int limit)
         {
-        }
-
-        // PUT: api/Book/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            ResponseBody response;
+            response = await BookRepository.SearchBookByTitle(title, offset, limit);
+            if (response.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+            }
+            return StatusCode(200, response);
         }
     }
 }
