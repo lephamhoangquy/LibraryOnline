@@ -38,7 +38,7 @@ namespace BookService.Repository
                         byte[] img = (byte[])(reader["Picture"]);
                         if (img != null)
                         {
-                            book.Picture = img;
+                            book.Picture = Convert.ToBase64String(img,0,img.Length);
                         }
                     }
                     book.AboutBook = reader["AboutBook"].ToString();
@@ -84,7 +84,7 @@ namespace BookService.Repository
                         byte[] img = (byte[])(reader["Picture"]);
                         if (img != null)
                         {
-                            result.Picture = img;
+                            result.Picture = Convert.ToBase64String(img, 0, img.Length);
                         }
                     }
                     result.AboutBook = reader["AboutBook"].ToString();
@@ -145,7 +145,7 @@ namespace BookService.Repository
                         byte[] img = (byte[])(reader["Picture"]);
                         if (img != null)
                         {
-                            book.Picture = img;
+                            book.Picture = Convert.ToBase64String(img, 0, img.Length);
                         }
                     }
                     book.AboutBook = reader["AboutBook"].ToString();
