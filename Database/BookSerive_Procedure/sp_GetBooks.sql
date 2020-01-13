@@ -11,17 +11,20 @@ begin
 		begin
 			select B.*, C.CategoryName
 			from Book B join Category C on B.CategoryID=C.CategoryID
-			order by B.BookID
+			order by B.CreatedAt desc
 			OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;
 		end
 		else
 		begin
 			select B.*, C.CategoryName
 			from Book B join Category C on B.CategoryID=C.CategoryID
-			order by B.BookID
+			order by B.CreatedAt desc
 			OFFSET @offset ROWS;
 		end
 	commit tran
 	return
 end
 
+--drop proc sp_GetBooks
+--declare @total1 int
+--exec sp_GetBooks 0,0,@total1 output
