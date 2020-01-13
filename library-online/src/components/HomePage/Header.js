@@ -1,6 +1,41 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
+
+const menus = [
+  {
+    name: "Home",
+    to: "/",
+    exact: true
+  },
+  {
+    name: "Books",
+    to: "/books",
+    exact: false
+  },
+  {
+    name: "Login",
+    to: "/login",
+    exact: false
+  }
+];
+
+const MenuLinks = ({ label, to, activeOnlyWhenExact }) => {
+  return (
+    <Route
+      path={to}
+      exact={activeOnlyWhenExact}
+      children={({ match }) => {
+        var active = match ? "active" : "";
+        return (
+          <li className={`navbar-item ${active}`}>
+            <Link to={to}>{label}</Link>
+          </li>
+        );
+      }}
+    />
+  );
+};
 
 class Header extends Component {
   render() {
@@ -45,25 +80,17 @@ class Header extends Component {
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav ml-auto">
-                  <li className="navbar-item active">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="navbar-item">
-                    <Link to="/books">Books</Link>
-                  </li>
-                  <li className="navbar-item">
-                    <a href="about.html" className="nav-link">
-                      About
-                    </a>
-                  </li>
-                  <li className="navbar-item">
-                    <a href="faq.html" className="nav-link">
-                      FAQ
-                    </a>
-                  </li>
-                  <li className="navbar-item">
-                    <Link to="/login">Login</Link>
-                  </li>
+                  {menus.length > 0 &&
+                    menus.map((menu, index) => {
+                      return (
+                        <MenuLinks
+                          key={index}
+                          label={menu.name}
+                          activeOnlyWhenExact={menu.exact}
+                          to={menu.to}
+                        />
+                      );
+                    })}
                 </ul>
                 <div className="cart my-2 my-lg-0">
                   <span>
