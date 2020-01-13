@@ -6,11 +6,12 @@ as
 begin
 	set @total = 0
 	begin tran
-		select @total = count(BookID) from Book
+		select @total = count(BookID) from Book where IsDelete = 0
 		if (@limit > 0)
 		begin
 			select B.*, C.CategoryName
 			from Book B join Category C on B.CategoryID=C.CategoryID
+			where B.IsDelete = 0
 			order by B.CreatedAt desc
 			OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;
 		end
@@ -18,6 +19,7 @@ begin
 		begin
 			select B.*, C.CategoryName
 			from Book B join Category C on B.CategoryID=C.CategoryID
+			where B.IsDelete = 0
 			order by B.CreatedAt desc
 			OFFSET @offset ROWS;
 		end
