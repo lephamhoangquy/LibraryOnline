@@ -17,10 +17,14 @@ namespace IAM.Model
         {
             try
             {
-                string[] results = info.Split("/");
+                //string[] results = info.Split("/");
+                int index = info.IndexOf("/");
+                string email = info.Substring(0, index);
+                int n = info.Length;
+                string passWord = info.Substring(index + 1, n - 1 - index);
                 LoginReq loginReq = new LoginReq();
-                loginReq.email = results[0];
-                loginReq.passWord = results[1];
+                loginReq.email = email;
+                loginReq.passWord = passWord;
                 return loginReq;
             }
             catch (Exception e)
