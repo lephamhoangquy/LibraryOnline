@@ -47,6 +47,18 @@
       ],
       "UpstreamPathTemplate": "/bms/books/search",
       "Key": "FindBookByTitle"
+    },
+    {
+      "DownstreamPathTemplate": "/bms/role",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "44314"
+        }
+      ],
+      "UpstreamPathTemplate": "/bms/role",
+      "Key": "GetUserRole"
     }
   ],
   "GlobalConfiguration": {
