@@ -16,7 +16,7 @@ namespace BookService.Model
         private int qty;
         private string createdAt;
         private double price;
-      
+        private bool isDeleted;
 
         public int BookID { get => bookID; set => bookID = value; }
         public string Title { get => title; set => title = value; }
@@ -28,14 +28,14 @@ namespace BookService.Model
         public int Qty { get => qty; set => qty = value; }
         public string CreatedAt { get => createdAt; set => createdAt = value; }
         public double Price { get => price; set => price = value; }
-       
+        public bool IsDeleted { get => isDeleted; set => isDeleted = value; }
 
         public BookModel()
         {
             BookID = CategoryID = Qty = 0;
             Title = Author = AboutBook = CategoryName = CreatedAt = "";
             Picture = null;
-           
+            isDeleted = false;
         }
 
     }

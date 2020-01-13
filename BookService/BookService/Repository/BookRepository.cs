@@ -10,6 +10,7 @@ namespace BookService.Repository
 {
     public class BookRepository
     {
+        private static DataConvert Converter = new BookDataConvertStrategy();
         public static async Task<ResponseBody> GetBooks(int offset, int limit)
         {
             SqlConnection con = DataProvider.GetConnection();
@@ -29,24 +30,7 @@ namespace BookService.Repository
                 List<BookModel> result = new List<BookModel>();
                 while (await reader.ReadAsync())
                 {
-                    BookModel book = new BookModel();
-                    book.BookID = int.Parse(reader["BookID"].ToString());
-                    book.Title = reader["Title"].ToString();
-                    book.Author = reader["Author"].ToString();
-                    if (reader["Picture"] != System.DBNull.Value)
-                    {
-                        byte[] img = (byte[])(reader["Picture"]);
-                        if (img != null)
-                        {
-                            book.Picture = Convert.ToBase64String(img,0,img.Length);
-                        }
-                    }
-                    book.AboutBook = reader["AboutBook"].ToString();
-                    book.CategoryID = int.Parse(reader["CategoryID"].ToString());
-                    book.Qty = int.Parse(reader["Qty"].ToString());
-                    book.CreatedAt = reader["CreatedAt"].ToString();
-                    book.CategoryName = reader["CategoryName"].ToString();
-                    book.Price = double.Parse(reader["Price"].ToString());
+                    BookModel book = (BookModel)Converter.ConvertDataReaderToModel(reader);
                     result.Add(book);
                 }
               
@@ -75,24 +59,7 @@ namespace BookService.Repository
                 BookModel result = null;
                 while (await reader.ReadAsync())
                 {
-                    result = new BookModel();
-                    result.BookID = int.Parse(reader["BookID"].ToString());
-                    result.Title = reader["Title"].ToString();
-                    result.Author = reader["Author"].ToString();
-                    if (reader["Picture"] != System.DBNull.Value)
-                    {
-                        byte[] img = (byte[])(reader["Picture"]);
-                        if (img != null)
-                        {
-                            result.Picture = Convert.ToBase64String(img, 0, img.Length);
-                        }
-                    }
-                    result.AboutBook = reader["AboutBook"].ToString();
-                    result.CategoryID = int.Parse(reader["CategoryID"].ToString());
-                    result.Qty = int.Parse(reader["Qty"].ToString());
-                    result.CreatedAt = reader["CreatedAt"].ToString();
-                    result.CategoryName = reader["CategoryName"].ToString();
-                    result.Price = double.Parse(reader["Price"].ToString());
+                    result = (BookModel)Converter.ConvertDataReaderToModel(reader);
                     break;
                 }
 
@@ -131,29 +98,11 @@ namespace BookService.Repository
             {
                 cmd.ExecuteNonQuery();
                 int total = int.Parse(cmd.Parameters["@total"].Value.ToString());
-                //int total = 0;
                 SqlDataReader reader = await cmd.ExecuteReaderAsync();
                 List<BookModel> result = new List<BookModel>();
                 while (await reader.ReadAsync())
                 {
-                    BookModel book = new BookModel();
-                    book.BookID = int.Parse(reader["BookID"].ToString());
-                    book.Title = reader["Title"].ToString();
-                    book.Author = reader["Author"].ToString();
-                    if (reader["Picture"] != System.DBNull.Value)
-                    {
-                        byte[] img = (byte[])(reader["Picture"]);
-                        if (img != null)
-                        {
-                            book.Picture = Convert.ToBase64String(img, 0, img.Length);
-                        }
-                    }
-                    book.AboutBook = reader["AboutBook"].ToString();
-                    book.CategoryID = int.Parse(reader["CategoryID"].ToString());
-                    book.Qty = int.Parse(reader["Qty"].ToString());
-                    book.CreatedAt = reader["CreatedAt"].ToString();
-                    book.CategoryName = reader["CategoryName"].ToString();
-                    book.Price = double.Parse(reader["Price"].ToString());
+                    BookModel book = (BookModel)Converter.ConvertDataReaderToModel(reader);
                     result.Add(book);
                 }
 
@@ -165,6 +114,30 @@ namespace BookService.Repository
             {
                 DataProvider.CloseConnection(con);
                 ResponseBody response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                return response;
+            }
+
+        }
+
+        public static async Task<ResponseBody> DeleteBookById(int BookId)
+        {
+            SqlConnection con = DataProvider.GetConnection();
+            SqlCommand cmd = new SqlCommand("sp_DeleteBookById", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@BookID", SqlDbType.Int).Value = BookId;
+            ResponseBody response;
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                DataProvider.CloseConnection(con);
+                response = new ResponseBody(EnumStatus.OK, "Delete book successfully");
+                return response;
+            }
+            catch (Exception e)
+            {
+                DataProvider.CloseConnection(con);
+                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
                 return response;
             }
 
