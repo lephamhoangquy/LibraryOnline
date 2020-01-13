@@ -37,9 +37,6 @@ namespace BookService.Repository
                 response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
                 return response;
             }
-
-
-            
         }
     }
 }
