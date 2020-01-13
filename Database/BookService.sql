@@ -3,13 +3,16 @@ create database BookService
 go
 use BookService
 go
+go
 create table Users(
-	Email varchar(100) not null,
+	Email varchar(100),
+	Permission int, -- 1: Người mua hàng, 2: admin
 	primary key (Email)
 )
 go
-insert into Users values ('1612545')
-insert into Users values ('1612557')
+insert into Users values ('1612557',1)
+go
+insert into Users values ('1612545',2)
 
 go
 create table Category (
@@ -94,6 +97,8 @@ create table CartDetail(
 )
 
 go
+
+
 
 --Insert Image
 /*
