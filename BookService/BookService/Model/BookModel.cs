@@ -9,14 +9,14 @@ namespace BookService.Model
         private int bookID;
         private string title;
         private string author;
-        private string picture;
         private string aboutBook;
-        private int categoryID;
-        private string categoryName;
         private int qty;
         private string createdAt;
         private double price;
         private bool isDeleted;
+        private string picture;
+        private int categoryID;
+        private string categoryName;
 
         public int BookID { get => bookID; set => bookID = value; }
         public string Title { get => title; set => title = value; }

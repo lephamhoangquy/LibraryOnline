@@ -117,5 +117,41 @@ namespace BookService.Controllers
             return StatusCode(200, response);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> InsertBook(BookModel book)
+        {
+            ResponseBody response;
+            if (book.Title == null || book.Author == null || book.AboutBook == null)
+            {
+                response = new ResponseBody(EnumStatus.BadRequest, "title - author - aboutBook");
+                return StatusCode(400, response);
+            }
+            if (book.Picture == null)
+            {
+                book.Picture = "";
+            }
+
+            StringValues values;
+            Request.Headers.TryGetValue("Authorization", out values);
+
+            ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
+            if (checkUserRoleResp.status != EnumStatus.OK)
+            {
+                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                {
+                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
+                }
+                response = new ResponseBody(EnumStatus.Forbidden, "Not permission to insert book");
+                return StatusCode(403, response);
+            }
+
+            response = await BookRepository.InsertBook(book);
+            if (response.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+            }
+            return StatusCode(200, response);
+        }
+
     }
 }
