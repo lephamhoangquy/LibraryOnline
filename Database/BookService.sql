@@ -29,7 +29,7 @@ create table Book(
 	BookID int identity (1,1),
 	Title nvarchar(100),
 	Author nvarchar(100),
-	Picture Image,
+	Picture varbinary(max),
 	AboutBook nvarchar(max),
 	CategoryID int,
 	Qty int,
@@ -101,7 +101,7 @@ go
 
 
 --Insert Image
-/*
-update Book
-set Picture = (Select MyImage.* from Openrowset(Bulk 'C:\Users\User\Desktop\BookImage\1.jpg', Single_Blob) MyImage)
-where BookID = 1*/
+
+--update Book
+--set Picture = (Select MyImage.* from Openrowset(Bulk 'C:\Users\User\Desktop\BookImage\1.jpg', Single_Blob) MyImage)
+--where BookID = 1
