@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,10 @@ namespace BookService
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("BookPolicy"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +50,7 @@ namespace BookService
             {
                 app.UseHsts();
             }
-
+            app.UseCors("BookPolicy");
             app.UseHttpsRedirection();
             app.UseMvc();
         }
