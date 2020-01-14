@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookService.Utils;
 using BookService.Model;
+using Microsoft.Extensions.Primitives;
+
 namespace BookService.Repository
 {
     public class UserRepository
@@ -37,6 +39,32 @@ namespace BookService.Repository
                 response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
                 return response;
             }
+        }
+        public static async Task<ResponseBody> CheckUserRole(StringValues values)
+        {
+            ResponseBody IAMResponse = await IAMRepository.GetActionSource(values);
+            if (IAMResponse.status != EnumStatus.OK)
+            {
+                return IAMResponse;
+            }
+
+            ResponseBodyWithData resp = (ResponseBodyWithData)IAMResponse;
+            UserModelIAM user = (UserModelIAM)resp.data;
+
+            ResponseBody GetRoleResponse = GetUserRole(user.Email);
+            if (GetRoleResponse.status != EnumStatus.OK)
+            {
+                return GetRoleResponse;
+            }
+
+            ResponseBodyWithData respRoleWithData = (ResponseBodyWithData)GetRoleResponse;
+            UserModel userInBookService = (UserModel)respRoleWithData.data;
+            if (userInBookService.Permission != 2)
+            {
+                ResponseBody response  = new ResponseBody(EnumStatus.Forbidden, "Not permission");
+                return response;
+            }
+            return respRoleWithData;
         }
     }
 }

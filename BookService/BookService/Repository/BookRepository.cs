@@ -142,5 +142,35 @@ namespace BookService.Repository
             }
 
         }
+
+        public static async Task<ResponseBody> UpdateBook(BookModel book)
+        {
+            SqlConnection con = DataProvider.GetConnection();
+            SqlCommand cmd = new SqlCommand("sp_UpdateBook", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@BookID", SqlDbType.Int).Value = book.BookID;
+            cmd.Parameters.Add("@Price", SqlDbType.Float).Value = book.Price;
+            cmd.Parameters.Add("@Author", SqlDbType.NVarChar).Value = book.Author;
+            cmd.Parameters.Add("@Title", SqlDbType.NVarChar).Value = book.Title;
+            cmd.Parameters.Add("@Qty", SqlDbType.Int).Value = book.Qty;
+            cmd.Parameters.Add("@AboutBook", SqlDbType.NVarChar).Value = book.AboutBook;
+            cmd.Parameters.Add("@Base64String", SqlDbType.VarChar).Value = book.Picture;
+
+            ResponseBody response;
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                DataProvider.CloseConnection(con);
+                response = new ResponseBody(EnumStatus.OK, "Update book successfully");
+                return response;
+            }
+            catch (Exception e)
+            {
+                DataProvider.CloseConnection(con);
+                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                return response;
+            }
+        }
     }
 }

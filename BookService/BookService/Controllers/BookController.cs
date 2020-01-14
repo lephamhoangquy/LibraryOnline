@@ -62,30 +62,54 @@ namespace BookService.Controllers
             ResponseBody response;
             Request.Headers.TryGetValue("Authorization", out values);
 
-            ResponseBody IAMResponse = await IAMRepository.GetActionSource(values);
-            if (IAMResponse.status != Utils.EnumStatus.OK)
+            ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
+            if (checkUserRoleResp.status != EnumStatus.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(IAMResponse.status), IAMResponse);
-            }
-
-            ResponseBodyWithData resp = (ResponseBodyWithData)IAMResponse;
-            UserModelIAM user = (UserModelIAM)resp.data;
-
-            ResponseBody GetRoleResponse = UserRepository.GetUserRole(user.Email);
-            if (GetRoleResponse.status != Utils.EnumStatus.OK)
-            {
-                return StatusCode(EnumStatus.GetStatusCode(GetRoleResponse.status), GetRoleResponse);
-            }
-
-            ResponseBodyWithData respRoleWithData = (ResponseBodyWithData)GetRoleResponse;
-            UserModel userInBookService = (UserModel)respRoleWithData.data;
-            if (userInBookService.Permission != 2)
-            {
+                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                {
+                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
+                }
                 response = new ResponseBody(EnumStatus.Forbidden, "Not permission to delete book");
                 return StatusCode(403, response);
             }
 
             response = await BookRepository.DeleteBookById(id);
+            if (response.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+            }
+            return StatusCode(200, response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateBook(BookModel book)
+        {
+            ResponseBody response;
+            if (book.BookID == 0 || book.Title == null || book.Author == null || book.AboutBook == null)
+            {
+                response = new ResponseBody(EnumStatus.BadRequest, "Require bookID - title - author - aboutBook");
+                return StatusCode(400, response);
+            }
+            if (book.Picture == null)
+            {
+                book.Picture = "";
+            }
+
+            StringValues values;
+            Request.Headers.TryGetValue("Authorization", out values);
+
+            ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
+            if (checkUserRoleResp.status != EnumStatus.OK)
+            {
+                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                {
+                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status),checkUserRoleResp);
+                }
+                response = new ResponseBody(EnumStatus.Forbidden, "Not permission to update book");
+                return StatusCode(403, response);
+            }
+          
+            response = await BookRepository.UpdateBook(book);
             if (response.status != EnumStatus.OK)
             {
                 return StatusCode(EnumStatus.GetStatusCode(response.status), response);
