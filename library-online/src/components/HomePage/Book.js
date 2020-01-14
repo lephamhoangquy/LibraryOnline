@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 class Book extends Component {
   render() {
@@ -15,11 +16,11 @@ class Book extends Component {
             <a href="#">Buy Now</a>
           </h6>
           <div className="hover">
-            <a href="product-single.html">
+            <Link to={`/book/${book.id}`}>
               <span>
                 <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
