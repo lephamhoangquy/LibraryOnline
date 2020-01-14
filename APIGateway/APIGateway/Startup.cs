@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
@@ -18,6 +20,7 @@ namespace APIGateway
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -25,6 +28,16 @@ namespace APIGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOcelot(Configuration);
+            services.AddCors(o => o.AddPolicy("GatewayPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("GatewayPolicy"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +49,7 @@ namespace APIGateway
             }
 
             await app.UseOcelot();
+            app.UseCors("GatewayPolicy");
 
             app.Run(async (context) =>
             {
