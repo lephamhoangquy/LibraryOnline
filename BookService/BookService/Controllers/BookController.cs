@@ -156,8 +156,16 @@ namespace BookService.Controllers
         [HttpPost("buy")]
         public async Task<IActionResult> BuyBook(BuyBookReq req)
         {
-            ResponseBody response;
+            StringValues values;
+            Request.Headers.TryGetValue("Authorization", out values);
 
+            ResponseBody getActionSourceResp = await IAMRepository.GetActionSource(values);
+            if (getActionSourceResp.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(getActionSourceResp.status), getActionSourceResp);
+            }
+
+            ResponseBody response;
             if (req.Email == null)
             {
                 return StatusCode(400, "Require Email");
