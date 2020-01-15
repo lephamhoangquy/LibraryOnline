@@ -29,6 +29,8 @@ namespace IAM.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
 
+            req.passWord = Encode.encode(req.passWord);
+
             response = await UserRepository.GetUserInfo(req.email, req.passWord);
             if (response.status != EnumStatus.OK)
             {
@@ -75,6 +77,8 @@ namespace IAM.Controllers
                 response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
+
+            userInfo.passWord = Encode.encode(userInfo.passWord);
 
             response = await UserRepository.GetUserInfo(userInfo.email, userInfo.passWord);
             if (response.status != EnumStatus.OK)
