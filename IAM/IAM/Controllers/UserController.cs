@@ -78,7 +78,7 @@ namespace IAM.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
 
-            userInfo.passWord = Encode.encode(userInfo.passWord);
+          //  userInfo.passWord = Encode.encode(userInfo.passWord);
 
             response = await UserRepository.GetUserInfo(userInfo.email, userInfo.passWord);
             if (response.status != EnumStatus.OK)
