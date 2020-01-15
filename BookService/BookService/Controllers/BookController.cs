@@ -156,6 +156,7 @@ namespace BookService.Controllers
         [HttpPost("buy")]
         public async Task<IActionResult> BuyBook(BuyBookReq req)
         {
+            ResponseBody response;
             StringValues values;
             Request.Headers.TryGetValue("Authorization", out values);
 
@@ -165,7 +166,30 @@ namespace BookService.Controllers
                 return StatusCode(EnumStatus.GetStatusCode(getActionSourceResp.status), getActionSourceResp);
             }
 
-            ResponseBody response;
+            ResponseBodyWithData resp = (ResponseBodyWithData)getActionSourceResp;
+            UserModelIAM user = (UserModelIAM)resp.data;
+
+            ResponseBody GetRoleResponse = UserRepository.GetUserRole(user.Email);
+            if (GetRoleResponse.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(GetRoleResponse.status),GetRoleResponse);
+            }
+
+            ResponseBodyWithData respRoleWithData = (ResponseBodyWithData)GetRoleResponse;
+            UserModel userInBookService = (UserModel)respRoleWithData.data;
+
+            if (userInBookService.Permission == 1)
+            {
+                if (req.Email != null)
+                {
+                    if (userInBookService.Email != req.Email)
+                    {
+                        response = new ResponseBody(EnumStatus.Forbidden, "User can not buy book for other user");
+                        return StatusCode(403, response);
+                    }
+                }
+            }
+
             if (req.Email == null)
             {
                 return StatusCode(400, "Require Email");
