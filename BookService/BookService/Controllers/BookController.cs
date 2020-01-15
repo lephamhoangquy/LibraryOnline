@@ -153,5 +153,36 @@ namespace BookService.Controllers
             return StatusCode(200, response);
         }
 
+        [HttpPost("buy")]
+        public async Task<IActionResult> BuyBook(BuyBookReq req)
+        {
+            ResponseBody response;
+
+            if (req.Email == null)
+            {
+                return StatusCode(400, "Require Email");
+            }
+
+            if (req.Address == null)
+            {
+                return StatusCode(400, "Require Address");
+            }
+
+            int n = req.Books.Length;
+            for (int i=0;i<n;i++)
+            {
+                if (req.Books[i].BookID == 0 || req.Books[i].Qty < 0)
+                {
+                    return StatusCode(400, "Require BookID - Qty");
+                }
+            }
+
+            response = await BookRepository.BuyBooks(req);
+            if (response.status != EnumStatus.OK)
+            {
+                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+            }
+            return StatusCode(200, response);
+        }
     }
 }

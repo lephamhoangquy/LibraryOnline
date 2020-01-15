@@ -202,5 +202,44 @@ namespace BookService.Repository
             }
         }
 
+        public static async Task<ResponseBody> BuyBooks(BuyBookReq req)
+        {
+            SqlConnection con = DataProvider.GetConnection();
+            SqlCommand cmd = new SqlCommand("sp_BuyBook", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            DataTable DanhSachDonHang = new DataTable();
+            DanhSachDonHang.Columns.Add("BookID",typeof(int));
+            DanhSachDonHang.Columns.Add("Qty", typeof(int));
+
+            int n = req.Books.Length;
+            for (int i=0;i<n;i++)
+            {
+                DataRow row = DanhSachDonHang.NewRow();
+                row["BookID"] = req.Books[i].BookID;
+                row["Qty"] = req.Books[i].Qty;
+                DanhSachDonHang.Rows.Add(row);
+            }
+
+            cmd.Parameters.AddWithValue("@DanhSachDonHang", DanhSachDonHang);
+            cmd.Parameters.AddWithValue("@Email", req.Email);
+            cmd.Parameters.AddWithValue("@Address", req.Address);
+
+            ResponseBody response;
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                response = new ResponseBody(EnumStatus.OK, "Buy book successfully");
+                DataProvider.CloseConnection(con);
+                return response;
+            }
+            catch (Exception e)
+            {
+                DataProvider.CloseConnection(con);
+                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                return response;
+            }
+        }
+
     }
 }
