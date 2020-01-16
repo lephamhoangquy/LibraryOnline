@@ -185,12 +185,14 @@ namespace BookService.Repository
             cmd.Parameters.Add("@Qty", SqlDbType.Int).Value = book.Qty;
             cmd.Parameters.Add("@AboutBook", SqlDbType.NVarChar).Value = book.AboutBook;
             cmd.Parameters.Add("@Base64String", SqlDbType.VarChar).Value = book.Picture;
-
+            cmd.Parameters.AddWithValue("@CreatedBookId", 0);
+            cmd.Parameters["@CreatedBookId"].Direction = ParameterDirection.Output;
             ResponseBody response;
             try
             {
                 await cmd.ExecuteNonQueryAsync();
                 DataProvider.CloseConnection(con);
+                book.BookID = int.Parse(cmd.Parameters["@CreatedBookId"].Value.ToString());
                 response = new ResponseBodyWithData(EnumStatus.OK, book, "Insert book successfully");
                 return response;
             }
