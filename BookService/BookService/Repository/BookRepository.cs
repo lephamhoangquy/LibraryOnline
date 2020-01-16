@@ -35,13 +35,13 @@ namespace BookService.Repository
                 }
               
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBodyWithDataAndTotal(EnumStatus.OK, result.ToArray(), "Get books successfully", total);
+                ResponseBody response = new ResponseBodyWithDataAndTotal(StatusManager.Instance.OK, result.ToArray(), "Get books successfully", total);
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                ResponseBody response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }    
@@ -66,18 +66,18 @@ namespace BookService.Repository
                 DataProvider.CloseConnection(con);
                 if (result != null)
                 {
-                    ResponseBody response = new ResponseBodyWithData(EnumStatus.OK, result, "Get book detail successfully");
+                    ResponseBody response = new ResponseBodyWithData(StatusManager.Instance.OK, result, "Get book detail successfully");
                     return response;
                 } else
                 {
-                    ResponseBody response = new ResponseBody(EnumStatus.NotFound,"Not found any book match with BookID");
+                    ResponseBody response = new ResponseBody(StatusManager.Instance.NotFound,"Not found any book match with BookID");
                     return response;
                 }
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBody(Utils.EnumStatus.InternalServerError, e.Message);
+                ResponseBody response = new ResponseBody(Utils.StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }
@@ -107,13 +107,13 @@ namespace BookService.Repository
                 }
 
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBodyWithDataAndTotal(EnumStatus.OK, result.ToArray(), "Get books successfully", total);
+                ResponseBody response = new ResponseBodyWithDataAndTotal(StatusManager.Instance.OK, result.ToArray(), "Get books successfully", total);
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                ResponseBody response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
 
@@ -131,13 +131,13 @@ namespace BookService.Repository
             {
                 await cmd.ExecuteNonQueryAsync();
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.OK, "Delete book successfully");
+                response = new ResponseBody(StatusManager.Instance.OK, "Delete book successfully");
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
 
@@ -162,13 +162,13 @@ namespace BookService.Repository
             {
                 await cmd.ExecuteNonQueryAsync();
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.OK, "Update book successfully");
+                response = new ResponseBody(StatusManager.Instance.OK, "Update book successfully");
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }
@@ -193,13 +193,13 @@ namespace BookService.Repository
                 await cmd.ExecuteNonQueryAsync();
                 DataProvider.CloseConnection(con);
                 book.BookID = int.Parse(cmd.Parameters["@CreatedBookId"].Value.ToString());
-                response = new ResponseBodyWithData(EnumStatus.OK, book, "Insert book successfully");
+                response = new ResponseBodyWithData(StatusManager.Instance.OK, book, "Insert book successfully");
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }
@@ -231,14 +231,14 @@ namespace BookService.Repository
             try
             {
                 await cmd.ExecuteNonQueryAsync();
-                response = new ResponseBody(EnumStatus.OK, "Buy book successfully");
+                response = new ResponseBody(StatusManager.Instance.OK, "Buy book successfully");
                 DataProvider.CloseConnection(con);
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }

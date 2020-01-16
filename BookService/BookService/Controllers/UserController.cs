@@ -24,24 +24,24 @@ namespace BookService.Controllers
             Request.Headers.TryGetValue("Authorization", out values);
 
             ResponseBody IAMResponse = await IAMRepository.GetActionSource(values);
-            if (IAMResponse.status != Utils.EnumStatus.OK)
+            if (IAMResponse.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(IAMResponse.status), IAMResponse);
+                return StatusCode(StatusManager.Instance.GetStatusCode(IAMResponse.status), IAMResponse);
             }
 
             ResponseBodyWithData resp = (ResponseBodyWithData)IAMResponse;
             UserModelIAM userIAM = (UserModelIAM)resp.data;
 
             ResponseBody GetRoleResponse = UserRepository.GetUserRole(userIAM.Email);
-            if (GetRoleResponse.status != Utils.EnumStatus.OK)
+            if (GetRoleResponse.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(GetRoleResponse.status), GetRoleResponse);
+                return StatusCode(StatusManager.Instance.GetStatusCode(GetRoleResponse.status), GetRoleResponse);
             }
 
             ResponseBodyWithData respWithData = (ResponseBodyWithData)GetRoleResponse;
             UserModel user = (UserModel)respWithData.data;
 
-            response = new ResponseBodyWithData(EnumStatus.OK, user, "Get role successfully");
+            response = new ResponseBodyWithData(StatusManager.Instance.OK, user, "Get role successfully");
             return StatusCode(200, response);
         }
 

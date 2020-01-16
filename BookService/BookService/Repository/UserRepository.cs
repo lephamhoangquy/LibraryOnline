@@ -29,21 +29,21 @@ namespace BookService.Repository
                 UserModel user = new UserModel();
                 user.Email = email;
                 user.Permission = role;
-                response = new ResponseBodyWithData(EnumStatus.OK, user, "Get user role successfully");
+                response = new ResponseBodyWithData(StatusManager.Instance.OK, user, "Get user role successfully");
                 DataProvider.CloseConnection(con);
                 return response;
             }
             catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }
         public static async Task<ResponseBody> CheckUserRole(StringValues values)
         {
             ResponseBody IAMResponse = await IAMRepository.GetActionSource(values);
-            if (IAMResponse.status != EnumStatus.OK)
+            if (IAMResponse.status != StatusManager.Instance.OK)
             {
                 return IAMResponse;
             }
@@ -52,7 +52,7 @@ namespace BookService.Repository
             UserModelIAM user = (UserModelIAM)resp.data;
 
             ResponseBody GetRoleResponse = GetUserRole(user.Email);
-            if (GetRoleResponse.status != EnumStatus.OK)
+            if (GetRoleResponse.status != StatusManager.Instance.OK)
             {
                 return GetRoleResponse;
             }
@@ -61,7 +61,7 @@ namespace BookService.Repository
             UserModel userInBookService = (UserModel)respRoleWithData.data;
             if (userInBookService.Permission != 2)
             {
-                ResponseBody response  = new ResponseBody(EnumStatus.Forbidden, "Not permission");
+                ResponseBody response  = new ResponseBody(StatusManager.Instance.Forbidden, "Not permission");
                 return response;
             }
             return respRoleWithData;

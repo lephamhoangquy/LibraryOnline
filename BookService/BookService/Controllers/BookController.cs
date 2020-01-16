@@ -21,9 +21,9 @@ namespace BookService.Controllers
         {
             ResponseBody response;
             response = await BookRepository.GetBooks(offset, limit);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -34,9 +34,9 @@ namespace BookService.Controllers
         {
             ResponseBody response;
             response = await BookRepository.GetBookDetail(id);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -46,9 +46,9 @@ namespace BookService.Controllers
         {
             ResponseBody response;
             response = await BookRepository.SearchBookByTitle(title, offset, limit);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -63,20 +63,20 @@ namespace BookService.Controllers
             Request.Headers.TryGetValue("Authorization", out values);
 
             ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
-            if (checkUserRoleResp.status != EnumStatus.OK)
+            if (checkUserRoleResp.status != StatusManager.Instance.OK)
             {
-                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                if (checkUserRoleResp.status != StatusManager.Instance.Forbidden)
                 {
-                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
+                    return StatusCode(StatusManager.Instance.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
                 }
-                response = new ResponseBody(EnumStatus.Forbidden, "Not permission to delete book");
+                response = new ResponseBody(StatusManager.Instance.Forbidden, "Not permission to delete book");
                 return StatusCode(403, response);
             }
 
             response = await BookRepository.DeleteBookById(id);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -87,7 +87,7 @@ namespace BookService.Controllers
             ResponseBody response;
             if (book.BookID == 0 || book.Title == null || book.Author == null || book.AboutBook == null)
             {
-                response = new ResponseBody(EnumStatus.BadRequest, "Require bookID - title - author - aboutBook");
+                response = new ResponseBody(StatusManager.Instance.BadRequest, "Require bookID - title - author - aboutBook");
                 return StatusCode(400, response);
             }
             if (book.Picture == null)
@@ -99,20 +99,20 @@ namespace BookService.Controllers
             Request.Headers.TryGetValue("Authorization", out values);
 
             ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
-            if (checkUserRoleResp.status != EnumStatus.OK)
+            if (checkUserRoleResp.status != StatusManager.Instance.OK)
             {
-                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                if (checkUserRoleResp.status != StatusManager.Instance.Forbidden)
                 {
-                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status),checkUserRoleResp);
+                    return StatusCode(StatusManager.Instance.GetStatusCode(checkUserRoleResp.status),checkUserRoleResp);
                 }
-                response = new ResponseBody(EnumStatus.Forbidden, "Not permission to update book");
+                response = new ResponseBody(StatusManager.Instance.Forbidden, "Not permission to update book");
                 return StatusCode(403, response);
             }
           
             response = await BookRepository.UpdateBook(book);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -123,7 +123,7 @@ namespace BookService.Controllers
             ResponseBody response;
             if (book.Title == null || book.Author == null || book.AboutBook == null)
             {
-                response = new ResponseBody(EnumStatus.BadRequest, "title - author - aboutBook");
+                response = new ResponseBody(StatusManager.Instance.BadRequest, "title - author - aboutBook");
                 return StatusCode(400, response);
             }
             if (book.Picture == null)
@@ -135,20 +135,20 @@ namespace BookService.Controllers
             Request.Headers.TryGetValue("Authorization", out values);
 
             ResponseBody checkUserRoleResp = await UserRepository.CheckUserRole(values);
-            if (checkUserRoleResp.status != EnumStatus.OK)
+            if (checkUserRoleResp.status != StatusManager.Instance.OK)
             {
-                if (checkUserRoleResp.status != EnumStatus.Forbidden)
+                if (checkUserRoleResp.status != StatusManager.Instance.Forbidden)
                 {
-                    return StatusCode(EnumStatus.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
+                    return StatusCode(StatusManager.Instance.GetStatusCode(checkUserRoleResp.status), checkUserRoleResp);
                 }
-                response = new ResponseBody(EnumStatus.Forbidden, "Not permission to insert book");
+                response = new ResponseBody(StatusManager.Instance.Forbidden, "Not permission to insert book");
                 return StatusCode(403, response);
             }
 
             response = await BookRepository.InsertBook(book);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }
@@ -161,18 +161,18 @@ namespace BookService.Controllers
             Request.Headers.TryGetValue("Authorization", out values);
 
             ResponseBody getActionSourceResp = await IAMRepository.GetActionSource(values);
-            if (getActionSourceResp.status != EnumStatus.OK)
+            if (getActionSourceResp.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(getActionSourceResp.status), getActionSourceResp);
+                return StatusCode(StatusManager.Instance.GetStatusCode(getActionSourceResp.status), getActionSourceResp);
             }
 
             ResponseBodyWithData resp = (ResponseBodyWithData)getActionSourceResp;
             UserModelIAM user = (UserModelIAM)resp.data;
 
             ResponseBody GetRoleResponse = UserRepository.GetUserRole(user.Email);
-            if (GetRoleResponse.status != EnumStatus.OK)
+            if (GetRoleResponse.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(GetRoleResponse.status),GetRoleResponse);
+                return StatusCode(StatusManager.Instance.GetStatusCode(GetRoleResponse.status),GetRoleResponse);
             }
 
             ResponseBodyWithData respRoleWithData = (ResponseBodyWithData)GetRoleResponse;
@@ -184,7 +184,7 @@ namespace BookService.Controllers
                 {
                     if (userInBookService.Email != req.Email)
                     {
-                        response = new ResponseBody(EnumStatus.Forbidden, "User can not buy book for other user");
+                        response = new ResponseBody(StatusManager.Instance.Forbidden, "User can not buy book for other user");
                         return StatusCode(403, response);
                     }
                 }
@@ -210,9 +210,9 @@ namespace BookService.Controllers
             }
 
             response = await BookRepository.BuyBooks(req);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
             return StatusCode(200, response);
         }

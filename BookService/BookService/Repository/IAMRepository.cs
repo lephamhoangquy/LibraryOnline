@@ -19,7 +19,7 @@ namespace BookService.Repository
             string token = values.FirstOrDefault();
             if (token == null || token == "")
             {
-                response = new ResponseBody(EnumStatus.Unauthorized, EnumStatus.Unauthorized);
+                response = new ResponseBody(StatusManager.Instance.Unauthorized, StatusManager.Instance.Unauthorized);
                 return response;
             }
 
@@ -30,7 +30,7 @@ namespace BookService.Repository
             HttpResponseMessage iamResp = await client.GetAsync(url);
             if (iamResp.StatusCode != HttpStatusCode.OK)
             {
-                response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
+                response = new ResponseBody(StatusManager.Instance.Forbidden, StatusManager.Instance.Forbidden);
                 return response;
             }
             try
@@ -38,12 +38,12 @@ namespace BookService.Repository
                 string content = await iamResp.Content.ReadAsStringAsync();
                 ResponseBodyWithData contentObject = JsonConvert.DeserializeObject<ResponseBodyWithData>(content);
                 UserModelIAM user = JsonConvert.DeserializeObject<UserModelIAM>(contentObject.data.ToString());
-                response = new ResponseBodyWithData(EnumStatus.OK, user, "Lấy thông tin user thành công");
+                response = new ResponseBodyWithData(StatusManager.Instance.OK, user, "Lấy thông tin user thành công");
                 return response;
             }
             catch (Exception e)
             {
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }
