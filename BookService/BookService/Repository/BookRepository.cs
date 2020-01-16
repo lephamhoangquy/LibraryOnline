@@ -191,7 +191,7 @@ namespace BookService.Repository
             {
                 await cmd.ExecuteNonQueryAsync();
                 DataProvider.CloseConnection(con);
-                response = new ResponseBody(EnumStatus.OK, "Insert book successfully");
+                response = new ResponseBodyWithData(EnumStatus.OK, book, "Insert book successfully");
                 return response;
             }
             catch (Exception e)
