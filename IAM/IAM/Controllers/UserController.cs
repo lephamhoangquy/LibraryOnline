@@ -20,21 +20,21 @@ namespace IAM.Controllers
             ResponseBody response;
             if (req.email == null)
             {
-                response = new ResponseBody(EnumStatus.BadRequest, "Email is empty");
+                response = new ResponseBody(StatusManager.Instance.BadRequest, "Email is empty");
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
             if (req.passWord == null)
             {
-                response = new ResponseBody(EnumStatus.BadRequest, "Password is empty");
+                response = new ResponseBody(StatusManager.Instance.BadRequest, "Password is empty");
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
 
             req.passWord = Encode.encode(req.passWord);
 
             response = await UserRepository.GetUserInfo(req.email, req.passWord);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                return StatusCode(EnumStatus.GetStatusCode(response.status), response);
+                return StatusCode(StatusManager.Instance.GetStatusCode(response.status), response);
             }
 
             try
@@ -47,7 +47,7 @@ namespace IAM.Controllers
             }
             catch (Exception e)
             {
-                response = new ResponseBody(EnumStatus.InternalServerError, e.Message);
+                response = new ResponseBody(StatusManager.Instance.InternalServerError, e.Message);
                 return StatusCode(500, response);
             }
 
@@ -62,28 +62,28 @@ namespace IAM.Controllers
             string info = TokenManager.ValidateToken(token);
             if (info == null)
             {
-                response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
+                response = new ResponseBody(StatusManager.Instance.Forbidden, StatusManager.Instance.Forbidden);
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
             LoginReq userInfo = LoginReq.GetEmailAndPasswordFromInfoString(info);
             if (userInfo == null)
             {
-                response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
+                response = new ResponseBody(StatusManager.Instance.Forbidden, StatusManager.Instance.Forbidden);
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
 
             if (userInfo.email == "" || userInfo.passWord == "")
             {
-                response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
+                response = new ResponseBody(StatusManager.Instance.Forbidden, StatusManager.Instance.Forbidden);
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
 
           //  userInfo.passWord = Encode.encode(userInfo.passWord);
 
             response = await UserRepository.GetUserInfo(userInfo.email, userInfo.passWord);
-            if (response.status != EnumStatus.OK)
+            if (response.status != StatusManager.Instance.OK)
             {
-                response = new ResponseBody(EnumStatus.Forbidden, EnumStatus.Forbidden);
+                response = new ResponseBody(StatusManager.Instance.Forbidden, StatusManager.Instance.Forbidden);
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
 

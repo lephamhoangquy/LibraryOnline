@@ -33,18 +33,18 @@ namespace IAM.Repository
                 DataProvider.CloseConnection(con);
                 if (result != null)
                 {
-                    ResponseBody response = new ResponseBodyWithData(Utils.EnumStatus.OK, result, "Get user info successfully");
+                    ResponseBody response = new ResponseBodyWithData(Utils.StatusManager.Instance.OK, result, "Get user info successfully");
                     return response;
                 }
                 else
                 {
-                    ResponseBody response = new ResponseBody(Utils.EnumStatus.NotFound, "Not found any user matched");
+                    ResponseBody response = new ResponseBody(Utils.StatusManager.Instance.NotFound, "Not found any user matched");
                     return response;
                 }
             } catch (Exception e)
             {
                 DataProvider.CloseConnection(con);
-                ResponseBody response = new ResponseBody(Utils.EnumStatus.InternalServerError, e.Message);
+                ResponseBody response = new ResponseBody(Utils.StatusManager.Instance.InternalServerError, e.Message);
                 return response;
             }
         }

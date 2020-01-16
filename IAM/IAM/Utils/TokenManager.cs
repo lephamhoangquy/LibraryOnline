@@ -82,7 +82,7 @@ namespace IAM.Utils
                 ClaimsPrincipal principal = tokenHandler.ValidateToken(token, parameters, out securityToken);
                 return principal;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
