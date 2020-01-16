@@ -7,6 +7,6 @@ namespace BookService.ClientConfig
 {
     public class IAMClientConfig
     {
-        public const string BaseUrl = "https://localhost:44375";
+        public const string BaseUrl = "https://localhost:44323";
     }
 }
