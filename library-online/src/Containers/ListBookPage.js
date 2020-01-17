@@ -4,6 +4,7 @@ import BreadCrumb from "../components/BookDetails/BreadCrumb";
 import Footer from "../components/HomePage/Footer";
 import ListBook from "../components/HomePage/ListBook";
 import callApi from "../utils/apiCaller";
+import { API_URL } from "../config";
 
 class ListBookPage extends Component {
   constructor(props) {
@@ -12,9 +13,9 @@ class ListBookPage extends Component {
   }
 
   componentDidMount() {
-    callApi("books", "GET", null).then(res => {
+    callApi(API_URL, "books", "GET", null, null).then(res => {
       this.setState({
-        books: res.data
+        books: res.data.data
       });
     });
   }

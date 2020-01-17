@@ -4,6 +4,7 @@ import BreadCrumb from "../components/BookDetails/BreadCrumb";
 import Book from "../components/BookDetails/Book";
 import Footer from "../components/HomePage/Footer";
 import callApi from "../utils/apiCaller";
+import { API_URL } from "../config";
 
 class BookDetail extends Component {
   constructor(props) {
@@ -14,12 +15,12 @@ class BookDetail extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    callApi(`books/${id}`, "GET", null).then(res =>
+    const { bookID } = this.props.match.params;
+    callApi(API_URL, `books/${bookID}`, "GET", null, null).then(res => {
       this.setState({
-        book: res.data
-      })
-    );
+        book: res.data.data
+      });
+    });
   }
 
   render() {

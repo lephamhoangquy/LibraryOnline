@@ -18,7 +18,10 @@ class Book extends Component {
                     className="active item carousel-item"
                     data-slide-number="0"
                   >
-                    <img src={book.picture} className="img-fluid"></img>
+                    <img
+                      src={`data:image/jpeg;base64,${book.picture}`}
+                      className="img-fluid"
+                    ></img>
                   </div>
                 </div>
               </div>

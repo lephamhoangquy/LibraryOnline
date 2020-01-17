@@ -1,34 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Field, reduxForm } from "redux-form";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-let LoginForm = props => {
-  const { handleSubmit } = props;
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="row">
-        <div className="col-md-5">
-          <Field name="username" component="input" type="text" />
-          <span className="required-star">*</span>
+class LoginForm extends Component {
+  render() {
+    return (
+      <form onSubmit={this.props.handleSubmit}>
+        <div className="row">
+          <div className="col-md-5">
+            <input
+              onChange={this.props.handleChange}
+              placeholder="Enter User Name"
+              required
+              name="email"
+            />
+            <span className="required-star">*</span>
+          </div>
+          <div className="col-md-5">
+            <input
+              onChange={this.props.handleChange}
+              type="password"
+              placeholder="Enter password"
+              required
+              name="passWord"
+            />
+            <span className="required-star">*</span>
+          </div>
+          <div className="col-lg-8 col-md-12">
+            <button type="submit" className="btn black">
+              Login
+            </button>
+            <h5>
+              not Registered? <a href="register.html">Register here</a>
+            </h5>
+          </div>
         </div>
-        <div className="col-md-5">
-          <Field name="password" component="input" type="password" />
-          <span className="required-star">*</span>
-        </div>
-        <div className="col-lg-8 col-md-12">
-          <button className="btn black">Login</button>
-          <h5>
-            not Registered?
-            <Link to="/register">Register here</Link>
-          </h5>
-        </div>
-      </div>
-    </form>
-  );
+      </form>
+    );
+  }
+}
+
+LoginForm.propTypes = {
+  handleChange: PropTypes.func,
+  handleSubmit: PropTypes.func
 };
-
-LoginForm = reduxForm({
-  form: "Login"
-})(LoginForm);
 
 export default LoginForm;

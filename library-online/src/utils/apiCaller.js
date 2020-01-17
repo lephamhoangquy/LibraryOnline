@@ -1,10 +1,10 @@
 import axios from "axios";
-import { API_URL } from "../config";
 
-export default function callApi(endPoint, method, body) {
+export default function callApi(URL, endPoint, method, headers, body) {
   return axios({
     method: method,
-    url: `${API_URL}/${endPoint}`,
+    url: `${URL}/${endPoint}`,
+    headers: headers,
     data: body
   }).catch(err => console.log(err));
 }

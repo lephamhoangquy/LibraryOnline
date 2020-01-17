@@ -9,14 +9,14 @@ class Book extends Component {
     return (
       <div className="col-lg-3 col-md-6">
         <div className="item">
-          <img src={book.picture} alt="img" />
+          <img src={`data:image/jpeg;base64,${book.picture}`} alt="img" />
           <h3>{book.title}</h3>
           <h6>
             <span className="price">{book && `${book.price} VND`}</span> /{" "}
             <a href="#">Buy Now</a>
           </h6>
           <div className="hover">
-            <Link to={`/book/${book.id}`}>
+            <Link to={`/book/${book.bookID}`}>
               <span>
                 <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
               </span>

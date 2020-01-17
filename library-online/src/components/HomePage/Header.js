@@ -1,44 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
-
-const menus = [
-  {
-    name: "Home",
-    to: "/",
-    exact: true
-  },
-  {
-    name: "Books",
-    to: "/books",
-    exact: false
-  },
-  {
-    name: "Login",
-    to: "/login",
-    exact: false
-  }
-];
-
-const MenuLinks = ({ label, to, activeOnlyWhenExact }) => {
-  return (
-    <Route
-      path={to}
-      exact={activeOnlyWhenExact}
-      children={({ match }) => {
-        var active = match ? "active" : "";
-        return (
-          <li className={`navbar-item ${active}`}>
-            <Link to={to}>{label}</Link>
-          </li>
-        );
-      }}
-    />
-  );
-};
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   render() {
+    const username = localStorage.getItem("email");
     return (
       <header>
         <div className="header-top">
@@ -61,7 +27,7 @@ class Header extends Component {
         <div className="main-menu">
           <div className="container">
             <nav className="navbar navbar-expand-lg navbar-light">
-              <a className="navbar-brand" href="index.html">
+              <a className="navbar-brand" href="/">
                 <img src="images/logo.png" alt="logo" />
               </a>
               <button
@@ -80,17 +46,30 @@ class Header extends Component {
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav ml-auto">
-                  {menus.length > 0 &&
-                    menus.map((menu, index) => {
-                      return (
-                        <MenuLinks
-                          key={index}
-                          label={menu.name}
-                          activeOnlyWhenExact={menu.exact}
-                          to={menu.to}
-                        />
-                      );
-                    })}
+                  <li className="navbar-item active">
+                    <Link to="/" className="nav-link">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="navbar-item active">
+                    <Link to="/books" className="nav-link">
+                      Books
+                    </Link>
+                  </li>
+                  {username && (
+                    <li className="navbar-item active">
+                      <Link to="/" className="nav-link">
+                        User: {username}
+                      </Link>
+                    </li>
+                  )}
+                  {!username && (
+                    <li className="navbar-item active">
+                      <Link to="/login" className="nav-link">
+                        Login
+                      </Link>
+                    </li>
+                  )}
                 </ul>
                 <div className="cart my-2 my-lg-0">
                   <span>

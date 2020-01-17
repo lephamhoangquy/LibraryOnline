@@ -15,7 +15,7 @@ const routes = [
     component: ListBookPage
   },
   {
-    path: "/book/:id",
+    path: "/book/:bookID",
     exact: true,
     component: BookDetail
   },
