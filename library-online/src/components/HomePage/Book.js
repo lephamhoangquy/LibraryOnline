@@ -13,7 +13,7 @@ class Book extends Component {
           <h3>{book.title}</h3>
           <h6>
             <span className="price">{book && `${book.price} VND`}</span> /{" "}
-            <a href="#">Buy Now</a>
+            <Link to={`/book/buy/${book.bookID}`}>Buy Now</Link>
           </h6>
           <div className="hover">
             <Link to={`/book/${book.bookID}`}>

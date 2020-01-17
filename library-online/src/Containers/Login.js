@@ -29,6 +29,7 @@ class Login extends Component {
     const body = { email, passWord };
     callApi(AUTH_API_URL, "authentication", "POST", null, body).then(res => {
       const { token, email } = res.data.data;
+      console.log("token: ", token);
       const headers = {
         authorization: `${token}`
       };

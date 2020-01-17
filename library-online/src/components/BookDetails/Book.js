@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 class Book extends Component {
   render() {
@@ -44,7 +45,9 @@ class Book extends Component {
               </ul>
               <div className="btn-sec">
                 <button className="btn ">Add To cart</button>
-                <button className="btn black">Buy Now</button>
+                <button className="btn black">
+                  <Link to={`/book/buy/${book.bookID}`}>Buy Now</Link>
+                </button>
               </div>
             </div>
           </div>

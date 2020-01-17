@@ -2,6 +2,7 @@ import HomePage from "../Containers/HomePage";
 import BookDetail from "../Containers/BookDetail";
 import ListBookPage from "../Containers/ListBookPage";
 import Login from "../Containers/Login";
+import OrderBookPage from "../Containers/OrderBookPage";
 
 const routes = [
   {
@@ -23,6 +24,11 @@ const routes = [
     path: "/login",
     exact: true,
     component: Login
+  },
+  {
+    path: "/book/buy/:bookID",
+    exact: true,
+    component: OrderBookPage
   }
 ];
 
